@@ -20,6 +20,7 @@
 #define SUPPORT_9488_555          //costs +230 bytes, 0.03s / 0.19s
 #define SUPPORT_B509_7793         //R61509, ST7793 +244 bytes
 #define OFFSET_9327 32            //costs about 103 bytes, 0.08s
+#define OFFSET_272x480 24
 
 #include "MCUFRIEND_kbv.h"
 #if defined(USE_SERIAL)
@@ -521,6 +522,12 @@ void MCUFRIEND_kbv::setAddrWindow(int16_t x, int16_t y, int16_t x1, int16_t y1)
 	if (_lcd_ID == 0x9327) {
 	    if (rotation == 2) y += OFFSET_9327, y1 += OFFSET_9327;
 	    if (rotation == 3) x += OFFSET_9327, x1 += OFFSET_9327;
+    }
+#endif
+#if defined(OFFSET_272x480)
+	if (_lcd_ID == 0x6814) {
+	    if (rotation & 1) y += OFFSET_272x480, y1 += OFFSET_272x480;
+	    else x += OFFSET_272x480, x1 += OFFSET_272x480;
     }
 #endif
 #if 1
@@ -1480,7 +1487,11 @@ case 0x4532:    // thanks Leodino
         p16 = (int16_t *) & HEIGHT;
         *p16 = 480;
         p16 = (int16_t *) & WIDTH;
+#if defined(OFFSET_272x480)
+        *p16 = 272;
+#else
         *p16 = 320;
+#endif
         break;
 #endif
 
