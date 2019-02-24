@@ -396,10 +396,10 @@ void MCUFRIEND_kbv::setRotation(uint8_t r)
                 if (r & 1) _MC = 0x82, _MP = 0x80;
                 else _MC = 0x80, _MP = 0x82;
             }
-			if (_lcd_ID == 0x5252) {             //HX8352-A
-			    val |= 0x02;   //VERT_SCROLLON
+            if (_lcd_ID == 0x5252) {             //HX8352-A
+                val |= 0x02;   //VERT_SCROLLON
                 if ((val & 0x10)) val ^= 0xD4;  //(ML) flip MY, MX, SS. GS=1
-//				if (val & 0x10) val |= 0x04;   //if (ML) SS=1 kludge mirror in XXX_REV modes
+//                if (val & 0x10) val |= 0x04;   //if (ML) SS=1 kludge mirror in XXX_REV modes
             }
 			goto common_BGR;
         }
