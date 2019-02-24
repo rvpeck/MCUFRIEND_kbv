@@ -10,8 +10,8 @@
 //#define SUPPORT_8230              //UC8230 +118 bytes
 //#define SUPPORT_8347D             //HX8347-D, HX8347-G, HX8347-I, HX8367-A +520 bytes, 0.27s
 //#define SUPPORT_8347A             //HX8347-A +500 bytes, 0.27s
-//#define SUPPORT_8352A             //HX8352A +486 bytes, 0.27s
-//#define SUPPORT_8352B             //HX8352B
+#define SUPPORT_8352A             //HX8352A +486 bytes, 0.27s
+#define SUPPORT_8352B             //HX8352B
 //#define SUPPORT_8357D_GAMMA       //monster 34 byte 
 //#define SUPPORT_9225              //ILI9225-B, ILI9225-G ID=0x9225, ID=0x9226 +380 bytes
 //#define SUPPORT_9326_5420         //ILI9326, SPFD5420 +246 bytes
@@ -396,9 +396,10 @@ void MCUFRIEND_kbv::setRotation(uint8_t r)
                 if (r & 1) _MC = 0x82, _MP = 0x80;
                 else _MC = 0x80, _MP = 0x82;
             }
-			if (_lcd_ID == 0x5252) {
+			if (_lcd_ID == 0x5252) {             //HX8352-A
 			    val |= 0x02;   //VERT_SCROLLON
-				if (val & 0x10) val |= 0x04;   //if (ML) SS=1 kludge mirror in XXX_REV modes
+                if ((val & 0x10)) val ^= 0xD4;  //(ML) flip MY, MX, SS. GS=1
+//				if (val & 0x10) val |= 0x04;   //if (ML) SS=1 kludge mirror in XXX_REV modes
             }
 			goto common_BGR;
         }
