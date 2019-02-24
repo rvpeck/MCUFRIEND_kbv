@@ -4,7 +4,7 @@
 //#define USE_MEGA_8BIT_SHIELD      // 4.7sec Mega2560 Shield
 //#define USE_MEGA_16BIT_SHIELD     // 2.14sec Mega2560 Shield 
 //#define USE_BLD_BST_MEGA32U4
-//#define USE_BLD_BST_MEGA2560      // 12.23sec Uno Shield (17.38s C)
+#define USE_BLD_BST_MEGA2560      // 12.23sec Uno Shield (17.38s C)
 //#define USE_BLD_BST_MEGA4809      // 5.43sec XPRO-Adapter (7.09s C)
 //#define USE_DUE_8BIT_PROTOSHIELD
 //#define USE_DUE_16BIT_SHIELD        //RD on PA15 (D24) 
@@ -255,11 +255,31 @@ static __attribute((always_inline))
 #define GMASK         0x20      //D4
 #define HMASK         0x78      //D6, D7, D8, D9
 
+#if defined(USE_BLD_BST_MEGA2560)
+static __attribute((always_inline)) void write_8(uint8_t val)
+{
+	asm volatile("lds __tmp_reg__,0x0102" "\n\t"  //PORTH
+	"BST %0,0" "\n\t" "BLD __tmp_reg__,5" "\n\t"
+	"BST %0,1" "\n\t" "BLD __tmp_reg__,6" "\n\t"
+	"BST %0,6" "\n\t" "BLD __tmp_reg__,3" "\n\t"
+	"BST %0,7" "\n\t" "BLD __tmp_reg__,4" "\n\t"
+	"sts 0x0102,__tmp_reg__" : : "a" (val));
+	asm volatile("in __tmp_reg__,0x05" "\n\t"     //PORTB
+	"BST %0,2" "\n\t" "BLD __tmp_reg__,4" "\n\t"
+	"BST %0,3" "\n\t" "BLD __tmp_reg__,5" "\n\t"
+	"BST %0,5" "\n\t" "BLD __tmp_reg__,7" "\n\t"
+	"out 0x05,__tmp_reg__" : : "a" (val));
+	asm volatile("in __tmp_reg__,0x14" "\n\t"     //PORTG
+	"BST %0,4" "\n\t" "BLD __tmp_reg__,5" "\n\t"
+	"out 0x14,__tmp_reg__" : : "a" (val));
+}
+#else
 #define write_8(x) {  \
         PORTH = (PORTH&~HMASK)|(((x)&B11000000)>>3)|(((x)&B00000011)<<5); \
         PORTB = (PORTB&~BMASK)|(((x)&B00101100)<<2); \
         PORTG = (PORTG&~GMASK)|(((x)&B00010000)<<1); \
     }
+#endif
 #define read_8()(\
                  ((PINH & B00011000) << 3) | ((PINB & BMASK) >> 2) | \
                  ((PING & GMASK) >> 1) | ((PINH & B01100000) >> 5) )
