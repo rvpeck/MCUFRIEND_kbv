@@ -14,6 +14,8 @@
 
 #include <SPI.h>          // f.k. for Arduino-1.5.2
 #include "Adafruit_GFX.h"// Hardware-specific library
+//#include <MCUFRIEND_kbv.h>
+//MCUFRIEND_kbv tft;
 #include <OPENSMART_kbv.h>
 OPENSMART_kbv tft;
 //#include <Adafruit_TFTLCD.h>

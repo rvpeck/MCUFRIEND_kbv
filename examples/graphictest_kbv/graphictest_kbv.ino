@@ -16,6 +16,8 @@
 #include "Adafruit_GFX.h"// Hardware-specific library
 #include <MCUFRIEND_kbv.h>
 MCUFRIEND_kbv tft;
+//#include <OPENSMART_kbv.h>
+//OPENSMART_kbv tft;
 //#include <Adafruit_TFTLCD.h>
 //Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
