@@ -1,4 +1,4 @@
-//#define SUPPORT_0139              //S6D0139 +280 bytes
+//#define SUPPORT_9341              //S6D0139 +280 bytes
 #define SUPPORT_0154              //S6D0154 +320 bytes
 //#define SUPPORT_1289              //SSD1289,SSD1297 (ID=0x9797) +626 bytes, 0.03s
 //#define SUPPORT_1580              //R61580 Untested
